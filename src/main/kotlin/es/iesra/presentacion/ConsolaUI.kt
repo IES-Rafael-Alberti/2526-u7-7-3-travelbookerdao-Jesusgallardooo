@@ -11,27 +11,44 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
 
 
     override fun iniciar() {
+
         var salir = false
+
         while (!salir) {
+
             mostrarMenu()
+
             when (leerOpcion()) {
+
                 1 -> crearReserva()
+
                 2 -> listarReservas()
-                3 -> {
-                    println("Saliendo de la aplicación. ¡Hasta luego!")
-                    salir = true
+
+                3 -> actualizarReserva()
+
+                4 -> eliminarReserva()
+
+                5 -> {
+                println("Saliendo de la aplicación. ¡Hasta luego!")
+                salir = true
+
                 }
 
                 else -> println("Opción no válida. Intente nuevamente.")
+
             }
+
         }
+
     }
 
     private fun mostrarMenu() {
         println("\n----- Gestor de Reservas -----")
         println("1. Crear nueva reserva")
         println("2. Listar reservas")
-        println("3. Salir")
+        println("3. actualizar reserva")
+        println("4. Eliminar reserva")
+        println("5. Salir")
         print("Seleccione una opción: ")
     }
 
@@ -86,7 +103,6 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
                     println("Error al crear la reserva: ${e.message}")
                 }
             }
-
             else -> println("Opción no válida.")
         }
     }
@@ -103,4 +119,13 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             reservas.forEach { println(it.toString()) }
         }
     }
+
+    private fun actualizarReserva() {
+        // TODO actualizar reserva
+    }
+
+    private fun eliminarReserva() {
+        // TODO eliminar reserva
+    }
+
 }
