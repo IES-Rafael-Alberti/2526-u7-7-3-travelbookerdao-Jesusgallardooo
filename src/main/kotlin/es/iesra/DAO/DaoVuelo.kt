@@ -7,23 +7,33 @@ class DaoVuelo: IDAO<ReservaVuelo> {
     private val vuelos = mutableListOf<ReservaVuelo>()
 
     override fun anadir(reserva: ReservaVuelo): Boolean {
-        TODO("Not yet implemented")
+
+        if (vuelos.any() {it.id == reserva.id}) {
+            return false
+        }else{
+            vuelos.add(reserva)
+            return true
+        }
+
     }
 
     override fun actualizar(reserva: ReservaVuelo) {
-        TODO("Not yet implemented")
+        val indice = vuelos.indexOfFirst { it.id == reserva.id }
+        if (indice != -1) {
+            vuelos[indice] = reserva
+        }
     }
 
     override fun eliminar(id: Int) {
-        TODO("Not yet implemented")
+        vuelos.removeIf { it.id == id }
     }
 
     override fun obtenerTodas(): List<ReservaVuelo> {
-        TODO("Not yet implemented")
+        return vuelos.toList()
     }
 
     override fun obtenerPorId(id: Int): ReservaVuelo? {
-        TODO("Not yet implemented")
+        return vuelos.find { it.id == id }
     }
 
 
