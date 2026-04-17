@@ -1,3 +1,5 @@
+import es.iesra.DAO.DaoHotel
+import es.iesra.DAO.DaoVuelo
 import es.iesra.repositorio.ReservaRepository
 import es.iesra.presentacion.ConsolaUI
 import es.iesra.presentacion.IUserInterface
@@ -9,11 +11,12 @@ import es.iesra.servicio.ReservaService
  * Se realiza la inyección de dependencias de manera manual.
  */
 fun main() {
-    // Crear la instancia del repositorio (capa de datos).
-    val repositorio = ReservaRepository()
+
+    val daoHotel = DaoHotel()
+    val daoVuelo = DaoVuelo()
 
     // Inyectar la dependencia en el servicio a través de la interfaz.
-    val reservaService: IReservaService = ReservaService(repositorio)
+    val reservaService: IReservaService = ReservaService(daoHotel, daoVuelo)
 
     // Inyectar el servicio en la capa de presentación a través de su interfaz.
     val ui: IUserInterface = ConsolaUI(reservaService)

@@ -26,19 +26,20 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         return texto
     }
 
-    private fun leerEnteroPositivo(mensaje:String):Int {
+    private fun leerTipoReserva(): String {
+        println("\nSeleccione el tipo de reserva:")
+        println("1. Vuelo")
+        println("2. Hotel")
+        print("Opción: ")
 
-        var numero: Int?
-
-        do {
-            print(mensaje)
-            numero = readln().trim().toIntOrNull()
-            if (numero == null || numero <= 0) {
-                println("Introduce un número válido entero positivo.")
+        return when (leerOpcion()) {
+            1 -> "vuelo"
+            2 -> "hotel"
+            else -> {
+                println("Opción no válida. Se seleccionará 'vuelo' por defecto.")
+                "vuelo"
             }
-        } while (numero == null || numero <= 0)
-
-        return numero
+        }
     }
 
     private fun leerHoraValida(mensaje:String):String {
@@ -167,6 +168,8 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
      */
     private fun actualizarReserva() {
 
+        val tipo = leerTipoReserva()
+
         print("\nintroduzca el id de la reserva a actualizar: ")
         val id = readln().toIntOrNull()
 
@@ -175,14 +178,14 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             return
         }
 
-        val reserva = reservaService.obtenerReserva(id)
+        val reserva = reservaService.obtenerReserva(tipo ,id)
 
         if (reserva == null) {
             println("No hay reserva con el id: $id")
             return
         }
 
-        println("Reserva actual -> $reserva")
+        println("Reserva actual -> ${reserva.detalle}")
 
         when (reserva) {
 
@@ -217,7 +220,8 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
      */
     private fun eliminarReserva() {
 
-        println("\nIntroduzca el id de la reserva que quiera eliminar: ")
+        val tipo = leerTipoReserva()
+        print("\nIntroduzca el id de la reserva que quiera eliminar: ")
         val id = readln().toIntOrNull()
 
         if (id == null) {
@@ -225,7 +229,7 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             return
         }
 
-        val eliminado = reservaService.eliminarReserva(id)
+        val eliminado = reservaService.eliminarReserva(tipo, id)
 
         if (eliminado){
             println("Reserva eliminada con creces.")

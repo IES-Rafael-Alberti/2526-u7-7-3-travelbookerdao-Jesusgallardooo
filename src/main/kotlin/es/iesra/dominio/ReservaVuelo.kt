@@ -39,5 +39,17 @@ class ReservaVuelo private constructor(
             contador++
             return reserva
         }
+
+        /**
+         * Método para reconstruir una reserva desde el fichero con su ID original.
+         * También actualiza el contador para evitar colisiones de ID.
+         */
+        fun reconstruirDesdeFichero(id: Int, descripcion: String, origen: String, destino: String, horaVuelo: String): ReservaVuelo {
+            // Actualizar el contador si el ID leído es mayor o igual
+            if (id >= contador) {
+                contador = id + 1
+            }
+            return ReservaVuelo(id, descripcion, origen, destino, horaVuelo)
+        }
     }
 }
