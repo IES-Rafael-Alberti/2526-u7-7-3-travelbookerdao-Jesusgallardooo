@@ -1,4 +1,4 @@
-package es.iesra.datos
+package es.iesra.repositorio
 
 import es.iesra.dominio.Reserva
 

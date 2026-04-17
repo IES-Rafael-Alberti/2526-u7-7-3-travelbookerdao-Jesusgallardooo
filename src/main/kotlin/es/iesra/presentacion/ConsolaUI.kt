@@ -12,6 +12,51 @@ import es.iesra.servicio.IReservaService
 class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
 
 
+    private fun leerTextoNoVacio(mensaje:String):String {
+
+        var texto: String
+
+        do {
+            print(mensaje)
+            texto = readln().trim()
+            if (texto.isEmpty()){
+                println("Este dato no puede estar vacío")
+            }
+        } while (texto.isEmpty())
+        return texto
+    }
+
+    private fun leerEnteroPositivo(mensaje:String):Int {
+
+        var numero: Int?
+
+        do {
+            print(mensaje)
+            numero = readln().trim().toIntOrNull()
+            if (numero == null || numero <= 0) {
+                println("Introduce un número válido entero positivo.")
+            }
+        } while (numero == null || numero <= 0)
+
+        return numero
+    }
+
+    private fun leerHoraValida(mensaje:String):String {
+
+        val regex = Regex("^([01]?\\d|2[0-3]):[0-5]\\d\$")
+        var hora: String
+
+        do {
+
+            print(mensaje)
+            hora = readln()
+            if(!regex.matches(hora)){
+                println("Formato inválido. (HH:mm)")
+            }
+        }while (hora.isEmpty() || !regex.matches(hora))
+        return hora
+    }
+
     override fun iniciar() {
 
         var salir = false
@@ -51,7 +96,7 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         println("3. actualizar reserva")
         println("4. Eliminar reserva")
         println("5. Salir")
-        print("Seleccione una opción: ")
+        println("Seleccione una opción: ")
     }
 
     private fun leerOpcion(): Int = try {
@@ -70,14 +115,10 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         print("Opción: ")
         when (leerOpcion()) {
             1 -> {
-                print("Ingrese la descripción (itinerario) de la reserva de vuelo: ")
-                val descripcion = readln()
-                print("Ingrese el origen: ")
-                val origen = readln()
-                print("Ingrese el destino: ")
-                val destino = readln()
-                print("Ingrese la hora de vuelo (HH:mm): ")
-                val horaVuelo = readln()
+                val descripcion = leerTextoNoVacio("Ingrese la descripción (itinerario) de la reserva de vuelo: ")
+                val origen = leerTextoNoVacio("Ingrese el origen: ")
+                val destino = leerTextoNoVacio("Ingrese el destino: ")
+                val horaVuelo = leerHoraValida("Ingrese la hora de vuelo (HH:mm): ")
                 try {
                     reservaService.crearReservaVuelo(descripcion, origen, destino, horaVuelo)
                     println("Reserva de vuelo creada exitosamente.")
@@ -87,17 +128,16 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             }
 
             2 -> {
-                print("Ingrese la descripción de la reserva de hotel: ")
-                val descripcion = readln()
-                print("Ingrese la ubicación: ")
-                val ubicacion = readln()
-                print("Ingrese el número de noches: ")
+                val descripcion = leerTextoNoVacio("Ingrese la descripción de la reserva de hotel: ")
+                val ubicacion = leerTextoNoVacio("Ingrese la ubicacion: ")
+                println("Ingrese numero de noches: ")
                 val numeroNoches = try {
                     readln().toInt()
                 } catch (e: Exception) {
                     println("Número inválido de noches, se asignará 1 por defecto.")
                     1
                 }
+
                 try {
                     reservaService.crearReservaHotel(descripcion, ubicacion, numeroNoches)
                     println("Reserva de hotel creada exitosamente.")
@@ -127,7 +167,7 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
      */
     private fun actualizarReserva() {
 
-        print("\n introduzca el id de la reserva a actualizar: ")
+        print("\nintroduzca el id de la reserva a actualizar: ")
         val id = readln().toIntOrNull()
 
         if (id == null) {
@@ -147,22 +187,16 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         when (reserva) {
 
             is ReservaVuelo -> {
-                println("Nueva descripción: ")
-                reserva.descripcion = readln()
-                println("Nuevo origen: ")
-                reserva.origen = readln()
-                println("Nuevo destino: ")
-                reserva.destino = readln()
-                println("Nueva hora(HH:mm): ")
-                reserva.horaVuelo = readln()
+                reserva.descripcion = leerTextoNoVacio("Nueva descripción: ")
+                reserva.origen = leerTextoNoVacio("Nuevo origen: ")
+                reserva.destino = leerTextoNoVacio("Nuevo destino: ")
+                reserva.horaVuelo = leerHoraValida("Nueva hora(HH:mm): ")
             }
 
             is ReservaHotel -> {
-                println("Nuva descripción: ")
-                reserva.descripcion = readln()
-                println("Nueva ubicación: ")
-                reserva.ubicacion = readln()
-                println("Nº de noches: ")
+                reserva.descripcion = leerTextoNoVacio("Nueva descripción: ")
+                reserva.ubicacion = leerTextoNoVacio("Nueva ubicacion: ")
+                print("Nº de noches: ")
                 reserva.numeroNoches = readln().toIntOrNull() ?:1
 
             }

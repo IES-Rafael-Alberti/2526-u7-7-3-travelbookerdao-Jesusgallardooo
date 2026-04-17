@@ -1,6 +1,6 @@
 package es.iesra.servicio
 
-import es.iesra.datos.IReservaRepository
+import es.iesra.repositorio.IReservaRepository
 import es.iesra.dominio.Reserva
 import es.iesra.dominio.ReservaHotel
 import es.iesra.dominio.ReservaVuelo
