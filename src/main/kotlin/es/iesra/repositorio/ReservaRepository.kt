@@ -8,7 +8,7 @@ import es.iesra.dominio.Reserva
 
 class ReservaRepository : IReservaRepository {
 
-    private val reservas = mutableListOf<Reserva>()
+    private val reservas: MutableList<Reserva> = mutableListOf()
 
     override fun anadir(reserva: Reserva): Boolean {
         var agregado = false

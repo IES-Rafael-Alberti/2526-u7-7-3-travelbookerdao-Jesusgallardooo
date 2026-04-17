@@ -96,7 +96,7 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         println("3. actualizar reserva")
         println("4. Eliminar reserva")
         println("5. Salir")
-        println("Seleccione una opción: ")
+        print("Seleccione una opción: ")
     }
 
     private fun leerOpcion(): Int = try {
@@ -130,7 +130,7 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             2 -> {
                 val descripcion = leerTextoNoVacio("Ingrese la descripción de la reserva de hotel: ")
                 val ubicacion = leerTextoNoVacio("Ingrese la ubicacion: ")
-                println("Ingrese numero de noches: ")
+                print("Ingrese numero de noches: ")
                 val numeroNoches = try {
                     readln().toInt()
                 } catch (e: Exception) {
