@@ -137,13 +137,42 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 
 Este conjunto de preguntas está diseñado para ayudarte a reflexionar sobre cómo has aplicado los criterios de evaluación en tu proyecto. Al responderlas, **asegúrate de hacer referencia y enlazar al código relevante** en tu `README.md`, facilitando así la evaluación de tu trabajo.
 
-## 1. [CE 7.c] ¿Que librería/clases has utilizado para realizar la práctica.? Comenta los métodos mas interesantes.
+## 1. [CE 7.c] ¿Que librería/clases has utilizado para realizar la práctica.? Comenta los métodos más interesantes.
+
+En cuanto a librerías, hemos usado varias, pero destacaría la que hemos usado par la gestión de ficheros con `java.io.file`. Gracias a esta librería se 
+entiende más fácilmente la escritura y lectura de ficheros y además es lo "nuevo" de esta práctica además del concepto de DAO.
+
+Y en cuanto a interés por algunos métodos, destacaría el uso de `printWriter().use {}` y `forEachLine`, ya que sirven para gestionar (concretamente
+escribir, guardadr y actualizar) ficheros de manera efectiva y correcta.
 
 ## 2. [CE 7.d] 2.a ¿Que formato le has dado a la información del fichero para guardar y recuperar la información? 
 
+Le he dado formato CSV, me pareció el formato más fácil de gestionar y controlar a la hora de desarrollar la práctica.
+
+- para hoteles: `id,descripcion,ubicacion,numeroNoches`
+- para vuelos: `id,descripcion,origen,destino,horaVuelo`
+
 ## 2.b ¿Que estrategia has usado para trabajar con los ficheros? (Carpeta en donde se guardan los ficheros, cuando crear los archivos, ....)
 
+Los ficheros se guardan en la raíz del proyecto, con los nombres: `hoteles.txt` y `vuelos.txt`.
+
+Si los ficheros no existen, se crearán automáticamente al guardar la primera reserva (sea del tipo que sea), gracias al método
+`printWriter()`, si están ya creados, se tratará con ellos de igual manera.
+
+En cuanto a la actualización de los ficheros, cada funcionalidad que llevemos a cabo (ya sea lectura, actualización o escritura), 
+reescribe completamente el fichero con el mismo contenido de la lista en memoria. 
+
+Y si hablamos de la carga inicial de los ficheros, los DAOs leen su fichero correspondiente (hoteles o vuelos) y reconstruyen en 
+memoria los objetos con todos los datos correctos.
+
 ## 2.c ¿Cómo se gestionan los errores? Pon ejemplos de código (enlace permanente al código en GitHub).
+
+En mi caso, he usado poco el control de excepciones con `try-catch`, he decidido controlarlo de otra manera con métodos específicos 
+para ello. Los he desarrollado en la clase `ConsolaUI`, con métodos como:
+
+- [**leerTextoNoVacio()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L15-L27)
+- [**leerTipoReserva()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L29-L43)
+- [**leerHoraValida()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L45-L59)
 
 ## 3. [CE 7.e] 3.a Describe la forma de acceso para leer información 
 
