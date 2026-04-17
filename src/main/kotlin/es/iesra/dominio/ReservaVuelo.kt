@@ -9,9 +9,9 @@ import java.time.LocalDateTime
 class ReservaVuelo private constructor(
     id: Int,
     descripcion: String,
-    val origen: String,
-    val destino: String,
-    val horaVuelo: String               // Se espera un formato válido (ej: "15:30")
+    var origen: String,
+    var destino: String,
+    var horaVuelo: String               // Se espera un formato válido (ej: "15:30")
 ) : Reserva(id, LocalDateTime.now(), descripcion) {
 
     // Se sobreescribe la propiedad detalle para incluir origen y destino.

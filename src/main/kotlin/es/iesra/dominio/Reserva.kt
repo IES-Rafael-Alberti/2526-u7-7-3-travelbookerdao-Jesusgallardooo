@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 abstract class Reserva(
     val id: Int,                              // Identificador único, inmutable.
     val fechaCreacion: LocalDateTime,         // Fecha de creación, inmutable.
-    val descripcion: String                   // Descripción de la reserva, no nula.
+    var descripcion: String                   // Descripción de la reserva, no nula.
 ) {
     // Propiedad detalle que concatena id y descripción.
     open val detalle: String

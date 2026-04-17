@@ -9,8 +9,8 @@ import java.time.LocalDateTime
 class ReservaHotel private constructor(
     id: Int,
     descripcion: String,
-    val ubicacion: String,
-    val numeroNoches: Int
+    var ubicacion: String,
+    var numeroNoches: Int
 ) : Reserva(id, LocalDateTime.now(), descripcion) {
 
     // Se sobreescribe la propiedad detalle para incluir la ubicación.

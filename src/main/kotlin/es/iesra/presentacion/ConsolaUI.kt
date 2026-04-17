@@ -1,6 +1,8 @@
 package es.iesra.presentacion
 
 import es.iesra.dominio.Reserva
+import es.iesra.dominio.ReservaHotel
+import es.iesra.dominio.ReservaVuelo
 import es.iesra.servicio.IReservaService
 
 /**
@@ -116,16 +118,87 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         if (reservas.isEmpty()) {
             println("No hay reservas registradas.")
         } else {
-            reservas.forEach { println(it.toString()) }
+            reservas.forEach { println(it.detalle) }
         }
     }
 
+    /**
+     * Método para actualizar reservas
+     */
     private fun actualizarReserva() {
-        // TODO actualizar reserva
+
+        print("\n introduzca el id de la reserva a actualizar: ")
+        val id = readln().toIntOrNull()
+
+        if (id == null) {
+            println("ID inválido.")
+            return
+        }
+
+        val reserva = reservaService.obtenerReserva(id)
+
+        if (reserva == null) {
+            println("No hay reserva con el id: $id")
+            return
+        }
+
+        println("Reserva actual -> $reserva")
+
+        when (reserva) {
+
+            is ReservaVuelo -> {
+                println("Nueva descripción: ")
+                reserva.descripcion = readln()
+                println("Nuevo origen: ")
+                reserva.origen = readln()
+                println("Nuevo destino: ")
+                reserva.destino = readln()
+                println("Nueva hora(HH:mm): ")
+                reserva.horaVuelo = readln()
+            }
+
+            is ReservaHotel -> {
+                println("Nuva descripción: ")
+                reserva.descripcion = readln()
+                println("Nueva ubicación: ")
+                reserva.ubicacion = readln()
+                println("Nº de noches: ")
+                reserva.numeroNoches = readln().toIntOrNull() ?:1
+
+            }
+        }
+
+        val actualizacion = reservaService.actualizarReserva(reserva)
+
+        if (actualizacion) {
+            println("Reserva actualizada correctamente.")
+        }else {
+            println("Error al actualizar la reserva.")
+        }
+
     }
 
+    /**
+     * Método para eliminar una reserva
+     */
     private fun eliminarReserva() {
-        // TODO eliminar reserva
+
+        println("\nIntroduzca el id de la reserva que quiera eliminar: ")
+        val id = readln().toIntOrNull()
+
+        if (id == null) {
+            println("ID incorrecto.")
+            return
+        }
+
+        val eliminado = reservaService.eliminarReserva(id)
+
+        if (eliminado){
+            println("Reserva eliminada con creces.")
+        }else {
+            println("No existe una reserva con ese ID.")
+        }
+
     }
 
 }
