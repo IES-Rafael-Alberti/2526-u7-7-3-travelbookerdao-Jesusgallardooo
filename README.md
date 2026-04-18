@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/AVL4zvU8)
 # Actividad: Desarrollo de Proyecto Software en Kotlin
 
 **ID actividad:** 2425_PRO_u4u5u6_taskManager
@@ -136,34 +137,73 @@ La aplicación debe seguir una **arquitectura en capas**, separando claramente:
 
 Este conjunto de preguntas está diseñado para ayudarte a reflexionar sobre cómo has aplicado los criterios de evaluación en tu proyecto. Al responderlas, **asegúrate de hacer referencia y enlazar al código relevante** en tu `README.md`, facilitando así la evaluación de tu trabajo.
 
-#### **Criterio global 1: Instancia objetos y hacer uso de ellos**
-- **(2.a, 2.b, 2.c, 2.d, 2.f, 2.h, 4.e, 4.f)**: Describe cómo has instanciado y utilizado objetos en tu proyecto. ¿Cómo has aplicado los constructores y pasado parámetros a los métodos? Proporciona ejemplos específicos de tu código.
+## 1. [CE 7.c] ¿Que librería/clases has utilizado para realizar la práctica.? Comenta los métodos más interesantes.
 
-#### **Criterio global 2: Crear y llamar métodos estáticos**
-- **(4.h)**: ¿Has definido algún método/propiedad estático en tu proyecto? ¿Cuál era el objetivo y por qué consideraste que debía ser estático en lugar de un método/propiedad de instancia?
-- **(2.e)**: ¿En qué parte del código se llama a un método estático o se utiliza la propiedad estática?
+En cuanto a librerías, hemos usado varias, pero destacaría la que hemos usado par la gestión de ficheros con `java.io.file`. Gracias a esta librería se 
+entiende más fácilmente la escritura y lectura de ficheros y además es lo "nuevo" de esta práctica además del concepto de DAO.
 
-#### **Criterio global 3: Uso de entornos**
-- **(2.i)**: ¿Cómo utilizaste el IDE para el desarrollo de tu proyecto? Describe el proceso de creación, compilación, y prueba de tu programa.
+Y en cuanto a interés por algunos métodos, destacaría el uso de `printWriter().use {}` y `forEachLine`, ya que sirven para gestionar (concretamente
+escribir, guardadr y actualizar) ficheros de manera efectiva y correcta.
 
-#### **Criterio global 4: Definir clases y su contenido**
-- **(4.a, 4.b, 4.c, 4.d, 4.g)**: Explica sobre un ejemplo de tu código, cómo definiste las clases en tu proyecto, es decir como identificaste las de propiedades, métodos y constructores y modificadores del control de acceso a métodos y propiedades, para representar al objeto del mundo real. ¿Cómo contribuyen estas clases a la solución del problema que tu aplicación aborda?
+## 2. [CE 7.d] 2.a ¿Que formato le has dado a la información del fichero para guardar y recuperar la información? 
 
-#### **Criterio global 5: Herencia y uso de clases abstractas e interfaces**
-- **(4.g, 7.a, 7.b, 7.c, 7.i, 7.j)**: Describe sobre tu código cómo has implementado la herencia y/o utilizado interfaces en tu proyecto. ¿Por qué elegiste este enfoque y cómo beneficia a la estructura de tu aplicación? ¿De qué manera has utilizado los principios SOLID para mejorar el diseño de tu proyecto? Mostrando tu código, contesta qué principios has utilizado y qué beneficio has obtenido.
+Le he dado formato CSV, me pareció el formato más fácil de gestionar y controlar a la hora de desarrollar la práctica.
 
-#### **Criterio global 6: Diseño de jerarquía de clases**
-- **(7.d, 7.e, 7.f, 7.g)**: Presenta la jerarquía de clases que diseñaste. ¿Cómo probaste y depuraste esta jerarquía para asegurar su correcto funcionamiento? ¿Qué tipo de herencia has utilizado: Especificación, Especialización, Extensión, Construcción?
+- para hoteles: `id,descripcion,ubicacion,numeroNoches`
+- para vuelos: `id,descripcion,origen,destino,horaVuelo`
 
-#### **Criterio global 7: Librerías de clases**
-- **(2.g, 4.i)**: Describe cualquier librería externa que hayas incorporado en tu proyecto. Explica cómo y por qué las elegiste, y cómo las incorporaste en tu proyecto. ¿Cómo extendió la funcionalidad de tu aplicación? Proporciona ejemplos específicos de su uso en tu proyecto.
+## 2.b ¿Que estrategia has usado para trabajar con los ficheros? (Carpeta en donde se guardan los ficheros, cuando crear los archivos, ....)
 
-#### **Criterio global 8: Documentado**
-- **(7.h)**: Muestra ejemplos de cómo has documentado y comentado tu código. ¿Que herramientas has utilizado? ¿Cómo aseguras que tu documentación aporte valor para la comprensión, mantenimiento y depuración del código?
+Los ficheros se guardan en la raíz del proyecto, con los nombres: `hoteles.txt` y `vuelos.txt`.
 
-#### **Criterio global 9: Genéricos**
-- **(6.f)**: Muestra ejemplos de tu código sobre cómo has implementado una clase con genéricos. ¿Qué beneficio has obtenido?
+Si los ficheros no existen, se crearán automáticamente al guardar la primera reserva (sea del tipo que sea), gracias al método
+`printWriter()`, si están ya creados, se tratará con ellos de igual manera.
 
-#### **Criterio global 10: Expresiones Regulares**
-- **(6.g)**: Muestra ejemplos de tu código donde hayas utilizado las expresiones regulares. ¿Qué beneficio has obtenido?
+En cuanto a la actualización de los ficheros, cada funcionalidad que llevemos a cabo (ya sea lectura, actualización o escritura), 
+reescribe completamente el fichero con el mismo contenido de la lista en memoria. 
 
+Y si hablamos de la carga inicial de los ficheros, los DAOs leen su fichero correspondiente (hoteles o vuelos) y reconstruyen en 
+memoria los objetos con todos los datos correctos.
+
+## 2.c ¿Cómo se gestionan los errores? Pon ejemplos de código (enlace permanente al código en GitHub).
+
+En mi caso, he usado poco el control de excepciones con `try-catch`, he decidido controlarlo de otra manera con métodos específicos 
+para ello. Los he desarrollado en la clase `ConsolaUI`, con métodos como:
+
+- [**leerTextoNoVacio()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L15-L27)
+- [**leerTipoReserva()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L29-L43)
+- [**leerHoraValida()**](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/75d739d2b0cb8d8dcfcc6e7f92dea504c8cba91c/src/main/kotlin/es/iesra/presentacion/ConsolaUI.kt#L45-L59)
+
+## 3. [CE 7.e] 3.a Describe la forma de acceso para leer información 
+
+Para la lectura de ficheros he utilizado la clase `File` de la librería `java.io`. Concretamente, uso el método 
+`forEachLine()`, que permite recorrer el fichero línea a línea de forma sencilla.
+
+Cada línea es una reserva, y las clasifico usando el método `split(","")` para separar los datos específicos, para luego
+reconstruir los objetos en memoria utilizando los métodos `crearInstancia()` de cada clase de cada tipo de reserva.
+
+## 3.b Describe la forma de acceso para escribir información 
+
+Para escribir en los ficheros he utilizado la función `printWriter()` de la clase `File`.
+
+Con este método escribo en el fichero y controlo automáticamente el cierre.
+
+Por cada vez que guardo información, recorro la lista en memoria (de vuelos u hoteles) y escribo cada reserva en una línea
+del fichero con formato CSV usando `println()`.
+
+Además, cada funcionalidad que llevemos a cabo "modifica los datos", ya que llama al método `guardarEnFichero()` y asegura
+que esté siempre sincronizado con la memoria.
+
+## 3.c Describe la forma de acceso para actualizar información. Pon ejemplos de código (enlace permanente al código en GitHub).
+
+La actualización de la información no se realiza directamente sobre el fichero, sino en memoria.
+
+Primero, se localiza la reserva dentro de la lista usando métodos como `indexOfFirst` o `find`.
+
+Una vez encontrada, se sustituye por la nueva versión del `objeto.find`.
+
+Después de modificar la lista, se vuelve a escribir todo el contenido en el fichero mediante el método `guardarEnFichero()`,
+sobrescribiendo el fichero completo.
+
+Un ejemplo donde se ve claramente la modificación de los ficheros podría ser el método [actualizar()](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/8aede7d8254268fc9c16bd8fc722796ff7a4fcbf/src/main/kotlin/es/iesra/DAO/DaoHotel.kt#L57-L64)
+(El enlace lleva al DaoHotel pero el método de DaoVuelo es exactamente igual)

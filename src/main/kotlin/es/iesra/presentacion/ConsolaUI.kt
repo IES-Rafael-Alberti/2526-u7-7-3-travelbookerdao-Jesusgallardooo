@@ -1,6 +1,8 @@
 package es.iesra.presentacion
 
 import es.iesra.dominio.Reserva
+import es.iesra.dominio.ReservaHotel
+import es.iesra.dominio.ReservaVuelo
 import es.iesra.servicio.IReservaService
 
 /**
@@ -10,28 +12,91 @@ import es.iesra.servicio.IReservaService
 class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
 
 
+    private fun leerTextoNoVacio(mensaje:String):String {
+
+        var texto: String
+
+        do {
+            print(mensaje)
+            texto = readln().trim()
+            if (texto.isEmpty()){
+                println("Este dato no puede estar vacío")
+            }
+        } while (texto.isEmpty())
+        return texto
+    }
+
+    private fun leerTipoReserva(): String {
+        println("\nSeleccione el tipo de reserva:")
+        println("1. Vuelo")
+        println("2. Hotel")
+        print("Opción: ")
+
+        return when (leerOpcion()) {
+            1 -> "vuelo"
+            2 -> "hotel"
+            else -> {
+                println("Opción no válida. Se seleccionará 'vuelo' por defecto.")
+                "vuelo"
+            }
+        }
+    }
+
+    private fun leerHoraValida(mensaje:String):String {
+
+        val regex = Regex("^([01]?\\d|2[0-3]):[0-5]\\d\$")
+        var hora: String
+
+        do {
+
+            print(mensaje)
+            hora = readln()
+            if(!regex.matches(hora)){
+                println("Formato inválido. (HH:mm)")
+            }
+        }while (hora.isEmpty() || !regex.matches(hora))
+        return hora
+    }
+
     override fun iniciar() {
+
         var salir = false
+
         while (!salir) {
+
             mostrarMenu()
+
             when (leerOpcion()) {
+
                 1 -> crearReserva()
+
                 2 -> listarReservas()
-                3 -> {
-                    println("Saliendo de la aplicación. ¡Hasta luego!")
-                    salir = true
+
+                3 -> actualizarReserva()
+
+                4 -> eliminarReserva()
+
+                5 -> {
+                println("Saliendo de la aplicación. ¡Hasta luego!")
+                salir = true
+
                 }
 
                 else -> println("Opción no válida. Intente nuevamente.")
+
             }
+
         }
+
     }
 
     private fun mostrarMenu() {
         println("\n----- Gestor de Reservas -----")
         println("1. Crear nueva reserva")
         println("2. Listar reservas")
-        println("3. Salir")
+        println("3. actualizar reserva")
+        println("4. Eliminar reserva")
+        println("5. Salir")
         print("Seleccione una opción: ")
     }
 
@@ -51,14 +116,10 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         print("Opción: ")
         when (leerOpcion()) {
             1 -> {
-                print("Ingrese la descripción (itinerario) de la reserva de vuelo: ")
-                val descripcion = readln()
-                print("Ingrese el origen: ")
-                val origen = readln()
-                print("Ingrese el destino: ")
-                val destino = readln()
-                print("Ingrese la hora de vuelo (HH:mm): ")
-                val horaVuelo = readln()
+                val descripcion = leerTextoNoVacio("Ingrese la descripción (itinerario) de la reserva de vuelo: ")
+                val origen = leerTextoNoVacio("Ingrese el origen: ")
+                val destino = leerTextoNoVacio("Ingrese el destino: ")
+                val horaVuelo = leerHoraValida("Ingrese la hora de vuelo (HH:mm): ")
                 try {
                     reservaService.crearReservaVuelo(descripcion, origen, destino, horaVuelo)
                     println("Reserva de vuelo creada exitosamente.")
@@ -68,17 +129,16 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
             }
 
             2 -> {
-                print("Ingrese la descripción de la reserva de hotel: ")
-                val descripcion = readln()
-                print("Ingrese la ubicación: ")
-                val ubicacion = readln()
-                print("Ingrese el número de noches: ")
+                val descripcion = leerTextoNoVacio("Ingrese la descripción de la reserva de hotel: ")
+                val ubicacion = leerTextoNoVacio("Ingrese la ubicacion: ")
+                print("Ingrese numero de noches: ")
                 val numeroNoches = try {
                     readln().toInt()
                 } catch (e: Exception) {
                     println("Número inválido de noches, se asignará 1 por defecto.")
                     1
                 }
+
                 try {
                     reservaService.crearReservaHotel(descripcion, ubicacion, numeroNoches)
                     println("Reserva de hotel creada exitosamente.")
@@ -86,7 +146,6 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
                     println("Error al crear la reserva: ${e.message}")
                 }
             }
-
             else -> println("Opción no válida.")
         }
     }
@@ -100,7 +159,84 @@ class ConsolaUI(private val reservaService: IReservaService) : IUserInterface {
         if (reservas.isEmpty()) {
             println("No hay reservas registradas.")
         } else {
-            reservas.forEach { println(it.toString()) }
+            reservas.forEach { println(it.detalle) }
         }
     }
+
+    /**
+     * Método para actualizar reservas
+     */
+    private fun actualizarReserva() {
+
+        val tipo = leerTipoReserva()
+
+        print("\nintroduzca el id de la reserva a actualizar: ")
+        val id = readln().toIntOrNull()
+
+        if (id == null) {
+            println("ID inválido.")
+            return
+        }
+
+        val reserva = reservaService.obtenerReserva(tipo ,id)
+
+        if (reserva == null) {
+            println("No hay reserva con el id: $id")
+            return
+        }
+
+        println("Reserva actual -> ${reserva.detalle}")
+
+        when (reserva) {
+
+            is ReservaVuelo -> {
+                reserva.descripcion = leerTextoNoVacio("Nueva descripción: ")
+                reserva.origen = leerTextoNoVacio("Nuevo origen: ")
+                reserva.destino = leerTextoNoVacio("Nuevo destino: ")
+                reserva.horaVuelo = leerHoraValida("Nueva hora(HH:mm): ")
+            }
+
+            is ReservaHotel -> {
+                reserva.descripcion = leerTextoNoVacio("Nueva descripción: ")
+                reserva.ubicacion = leerTextoNoVacio("Nueva ubicacion: ")
+                print("Nº de noches: ")
+                reserva.numeroNoches = readln().toIntOrNull() ?:1
+
+            }
+        }
+
+        val actualizacion = reservaService.actualizarReserva(reserva)
+
+        if (actualizacion) {
+            println("Reserva actualizada correctamente.")
+        }else {
+            println("Error al actualizar la reserva.")
+        }
+
+    }
+
+    /**
+     * Método para eliminar una reserva
+     */
+    private fun eliminarReserva() {
+
+        val tipo = leerTipoReserva()
+        print("\nIntroduzca el id de la reserva que quiera eliminar: ")
+        val id = readln().toIntOrNull()
+
+        if (id == null) {
+            println("ID incorrecto.")
+            return
+        }
+
+        val eliminado = reservaService.eliminarReserva(tipo, id)
+
+        if (eliminado){
+            println("Reserva eliminada con creces.")
+        }else {
+            println("No existe una reserva con ese ID.")
+        }
+
+    }
+
 }

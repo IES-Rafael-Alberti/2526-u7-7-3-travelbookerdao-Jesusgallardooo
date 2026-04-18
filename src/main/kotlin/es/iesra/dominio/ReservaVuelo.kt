@@ -9,9 +9,9 @@ import java.time.LocalDateTime
 class ReservaVuelo private constructor(
     id: Int,
     descripcion: String,
-    val origen: String,
-    val destino: String,
-    val horaVuelo: String               // Se espera un formato válido (ej: "15:30")
+    var origen: String,
+    var destino: String,
+    var horaVuelo: String               // Se espera un formato válido (ej: "15:30")
 ) : Reserva(id, LocalDateTime.now(), descripcion) {
 
     // Se sobreescribe la propiedad detalle para incluir origen y destino.
@@ -38,6 +38,18 @@ class ReservaVuelo private constructor(
             val reserva = ReservaVuelo(contador, descripcion, origen, destino, horaVuelo)
             contador++
             return reserva
+        }
+
+        /**
+         * Método para reconstruir una reserva desde el fichero con su ID original.
+         * También actualiza el contador para evitar colisiones de ID.
+         */
+        fun reconstruirDesdeFichero(id: Int, descripcion: String, origen: String, destino: String, horaVuelo: String): ReservaVuelo {
+            // Actualizar el contador si el ID leído es mayor o igual
+            if (id >= contador) {
+                contador = id + 1
+            }
+            return ReservaVuelo(id, descripcion, origen, destino, horaVuelo)
         }
     }
 }

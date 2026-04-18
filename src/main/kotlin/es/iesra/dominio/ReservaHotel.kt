@@ -9,9 +9,11 @@ import java.time.LocalDateTime
 class ReservaHotel private constructor(
     id: Int,
     descripcion: String,
-    val ubicacion: String,
-    val numeroNoches: Int
+    var ubicacion: String,
+    var numeroNoches: Int
 ) : Reserva(id, LocalDateTime.now(), descripcion) {
+
+
 
     // Se sobreescribe la propiedad detalle para incluir la ubicación.
     override val detalle: String
@@ -34,6 +36,17 @@ class ReservaHotel private constructor(
             val reserva = ReservaHotel(contador, descripcion, ubicacion, numeroNoches)
             contador++
             return reserva
+        }
+
+        /** Método para reconstruir una reserva desde el fichero con su ID original.
+        * También actualiza el contador para evitar colisiones de ID.
+        */
+        fun reconstruirDesdeFichero(id: Int, descripcion: String, ubicacion: String, numeroNoches: Int): ReservaHotel {
+            // Actualizar el contador si el ID leído es mayor o igual
+            if (id >= contador) {
+                contador = id + 1
+            }
+            return ReservaHotel(id, descripcion, ubicacion, numeroNoches)
         }
     }
 }
