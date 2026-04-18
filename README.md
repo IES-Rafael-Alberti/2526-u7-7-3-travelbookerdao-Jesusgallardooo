@@ -176,7 +176,34 @@ para ello. Los he desarrollado en la clase `ConsolaUI`, con métodos como:
 
 ## 3. [CE 7.e] 3.a Describe la forma de acceso para leer información 
 
+Para la lectura de ficheros he utilizado la clase `File` de la librería `java.io`. Concretamente, uso el método 
+`forEachLine()`, que permite recorrer el fichero línea a línea de forma sencilla.
+
+Cada línea es una reserva, y las clasifico usando el método `split(","")` para separar los datos específicos, para luego
+reconstruir los objetos en memoria utilizando los métodos `crearInstancia()` de cada clase de cada tipo de reserva.
+
 ## 3.b Describe la forma de acceso para escribir información 
+
+Para escribir en los ficheros he utilizado la función `printWriter()` de la clase `File`.
+
+Con este método escribo en el fichero y controlo automáticamente el cierre.
+
+Por cada vez que guardo información, recorro la lista en memoria (de vuelos u hoteles) y escribo cada reserva en una línea
+del fichero con formato CSV usando `println()`.
+
+Además, cada funcionalidad que llevemos a cabo "modifica los datos", ya que llama al método `guardarEnFichero()` y asegura
+que esté siempre sincronizado con la memoria.
 
 ## 3.c Describe la forma de acceso para actualizar información. Pon ejemplos de código (enlace permanente al código en GitHub).
 
+La actualización de la información no se realiza directamente sobre el fichero, sino en memoria.
+
+Primero, se localiza la reserva dentro de la lista usando métodos como `indexOfFirst` o `find`.
+
+Una vez encontrada, se sustituye por la nueva versión del `objeto.find`.
+
+Después de modificar la lista, se vuelve a escribir todo el contenido en el fichero mediante el método `guardarEnFichero()`,
+sobrescribiendo el fichero completo.
+
+Un ejemplo donde se ve claramente la modificación de los ficheros podría ser el método [actualizar()](https://github.com/IES-Rafael-Alberti/2526-u7-7-3-travelbookerdao-Jesusgallardooo/blob/8aede7d8254268fc9c16bd8fc722796ff7a4fcbf/src/main/kotlin/es/iesra/DAO/DaoHotel.kt#L57-L64)
+(El enlace lleva al DaoHotel pero el método de DaoVuelo es exactamente igual)
